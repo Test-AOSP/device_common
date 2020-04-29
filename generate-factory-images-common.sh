@@ -170,9 +170,16 @@ fastboot reboot-bootloader
 sleep $SLEEPDURATION
 EOF
 fi
+if test "$TARGET_BUILD_VARIANT" = "user"
+then
 cat >> tmp/$PRODUCT-$VERSION/flash-all.sh << EOF
 fastboot -w --skip-reboot update image-$PRODUCT-$VERSION.zip
 EOF
+else
+cat >> tmp/$PRODUCT-$VERSION/flash-all.sh << EOF
+fastboot -w update image-$PRODUCT-$VERSION.zip
+EOF
+fi
 chmod a+x tmp/$PRODUCT-$VERSION/flash-all.sh
 
 # Write flash-all.bat
@@ -254,9 +261,18 @@ fastboot reboot-bootloader
 ping -n $SLEEPDURATION 127.0.0.1 >nul
 EOF
 fi
+if test "$TARGET_BUILD_VARIANT" = "user"
+then
 cat >> tmp/$PRODUCT-$VERSION/flash-all.bat << EOF
 fastboot -w --skip-reboot update image-$PRODUCT-$VERSION.zip
+EOF
+else
+cat >> tmp/$PRODUCT-$VERSION/flash-all.bat << EOF
+fastboot -w update image-$PRODUCT-$VERSION.zip
+EOF
+fi
 
+cat >> tmp/$PRODUCT-$VERSION/flash-all.bat << EOF
 echo Press any key to exit...
 pause >nul
 exit
